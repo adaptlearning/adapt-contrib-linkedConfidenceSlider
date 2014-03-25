@@ -1,0 +1,171 @@
+.linkedConfidenceSlider-component {
+
+    .button {
+        outline: none;
+        text-decoration: none;
+        padding: @button-padding;
+        color: @button-text-color;
+        background-color: @button-color;
+        display: none;
+        margin-top:8px;
+
+        &.submit {
+            display: inline-block;
+        }
+    }
+
+    .disabledControls {
+        .linkedConfidenceSlider-item-bar-background,
+        .linkedConfidenceSlider-item-linked-confidence-bar, 
+        .linkedConfidenceSlider-item-indicator-bar,
+        .linkedConfidenceSlider-item-outer-bar {
+            cursor: default;
+        }
+        .button.submit {
+            display: none;
+        }
+        .linkedConfidenceSlider-item-handle {
+            display:none;
+        }
+    }
+
+    .linkedConfidenceSlider-widget {
+        &.submitted {
+            .disabledControls;
+        }
+
+        &.disabled {
+            .disabledControls;
+        }
+    }
+
+    .linkedConfidenceSlider-container {
+        padding-bottom: 0px;
+        width: 100%;
+    }
+
+    .linkedConfidenceSlider-scale-label {
+        display: inline-block;
+        height: 30px;
+        line-height: 30px;
+        text-align: center;
+        border-radius: 5px;
+    }
+
+    .linkedConfidenceSlider-label-axis {
+        text-align: center;
+        font-weight: bold;
+    }
+
+    .linkedConfidenceSlider-scale-label-low {
+        float: left;
+        margin-left: 6%;
+    }
+
+    .linkedConfidenceSlider-scale-label-high {
+        float: right;
+        margin-right: 6%;
+    }
+
+    .linkedConfidenceSlider-scale-numbers, .linkedConfidenceSlider-scale-notches {
+        position:relative;
+        width:85%;
+        margin: 30px 7.5% 20px;
+    }
+
+    .linkedConfidenceSlider-scale-number {
+        position: absolute;
+        width: 30px;
+        text-align: center;
+        margin-left: -15px;
+        top: -32px;
+    }
+
+    .linkedConfidenceSlider-scale-notch {
+        width: 2px;
+        height: 13px;
+        background-color: @item-color;
+        position: absolute;
+        margin-left: -1px;
+        top: -11px;
+    }
+
+    .linkedConfidenceSlider-scale-background {
+        width: 100%;
+        height: 2px;
+        background-color: @item-color;
+        float: left;
+        position: relative;
+    }
+
+    .linkedConfidenceSlider-item {
+        position:relative;
+        margin-bottom:8px;
+    }
+
+    .linkedConfidenceSlider-item-handle {
+        display: block;
+        position: absolute;
+        height: 30px;
+        cursor: pointer;
+        width: 30px;
+        border-radius: 50%;
+        background-color: @item-color;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+        color: #fff;
+        text-align: center;
+        z-index: 4;
+        top: -15px;
+        margin-left: -15px;
+    }
+
+    .linkedConfidenceSlider-item-outer-bar {
+        width: 90%;
+        height: 21px;
+        position: relative;
+        float: left;
+        margin: 0 5%;
+        border-radius: 20px;
+        box-shadow: inset -1px 1px 2px 2px rgba(0,0,0,0.3);
+        background-color: #f6f4ec;
+        cursor: pointer;
+    }
+
+    .linkedConfidenceSlider-item-bar {
+        width: 85%;
+        height: 6px;
+        cursor: pointer;
+        position: relative;
+        float: left;
+        margin: 0 7.5%;
+        top: 14px;
+        border-radius: 20px;
+        box-shadow: inset -1px 1px 1px 1px rgba(0,0,0,0.2);
+    }
+
+    .linkedConfidenceSlider-item-indicator-bar, 
+    .linkedConfidenceSlider-item-linked-confidence-bar,
+    .linkedConfidenceSlider-item-bar-background {
+        height: 6px;
+        float: left;
+        position: absolute;
+        cursor: pointer;
+        border-radius: 20px;
+    }
+
+    .linkedConfidenceSlider-item-indicator-bar {
+        background-color: darken(@item-color, 20%);
+        z-index: 3;
+    }
+
+    .linkedConfidenceSlider-item-linked-confidence-bar {
+        background-color: lighten(@item-color, 20%);
+        z-index: 2;
+    }
+
+    .linkedConfidenceSlider-item-bar-background {
+        width: 100%;
+        background-color: #999;
+        z-index: 1;
+    }
+}
