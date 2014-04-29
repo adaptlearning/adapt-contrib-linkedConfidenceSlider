@@ -1,6 +1,6 @@
 {
   "name": "adapt-contrib-linkedConfidenceSlider",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A sliding scale component that compares user confidence to a previous measurement.",
   "main": "",
   "scripts": {
@@ -16,7 +16,7 @@
     "url": "https://github.com/adaptlearning/adapt-contrib-linkedConfidenceSlider/issues"
   },
   "devDependencies": {
-    "karma": "~0.9",
+    "karma": "~0.10",
     "karma-mocha": "*",
     "karma-expect": "*",
     "adapt-contrib-slider": "*",
