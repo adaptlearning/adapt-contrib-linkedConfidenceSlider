@@ -203,7 +203,7 @@ define(function(require) {
             this.$('.linkedConfidenceSlider-item-indicator-bar').css({
                 width: handlePosition
             });
-            if(!this.model.get('_isFirstPart') && this.model.get('_linkedConfidence') !== undefined) {
+            if(this.model.get('_linkedConfidence') !== undefined) {
                 this.updateLinkedConfidenceIndicator();
             }
         },
@@ -244,7 +244,6 @@ define(function(require) {
         },
 
         getComparisonFeedback: function() {
-            if(this.model.get('_isFirstPart')) return;
             var confidence = this.model.get('_confidence'),
                 linkedConfidence = this.model.get('_linkedModel').get('_confidence'),
                 confidenceDifference = confidence - linkedConfidence,
