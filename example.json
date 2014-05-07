@@ -7,6 +7,7 @@
     "_layout":"right",
     "_linkedTo": "c-135",
     "title": "Linked Confidence Slider",
+    "displayTitle": "Linked Confidence Slider",
     "disabledBody": "You need to measure your confidence in the linked part before you can do this part.",
     "body": "The second part will automatically use the scale from the linked confidence slider. How do you feel now about the following statement?<br/><br/>The confidence slider is a good component.",
     "_feedback": {
@@ -34,7 +35,7 @@
             }
         ]
     },
-    "buttons": {
+    "_buttons": {
         "submit": ""
     },
     "_pageLevelProgress": {
