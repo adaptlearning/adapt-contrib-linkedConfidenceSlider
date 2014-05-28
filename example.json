@@ -5,7 +5,7 @@
     "_component":"linkedConfidenceSlider",
     "_classes":"",
     "_layout":"right",
-    "_linkedTo": "c-135",
+    "_linkedToId": "c-135",
     "title": "Linked Confidence Slider",
     "displayTitle": "Linked Confidence Slider",
     "disabledBody": "You need to measure your confidence in the linked part before you can do this part.",
