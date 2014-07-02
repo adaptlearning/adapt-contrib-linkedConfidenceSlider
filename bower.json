@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "homepage": "https://github.com/adaptlearning/adapt-contrib-linkedConfidenceSlider",
   "authors": [
-    "Kev Adsett <kev.adsett@kineo.com>"
+    "Kev Adsett <kev.adsett@kineo.com>",
+    "Himanshu Rajotia <himanshu.rajotia@credipoint.com>"
   ],
   "description": "A contributed sliding scale component that compares user confidence to a previous measurement.",
   "main": "/js/adapt-contrib-linkedConfidenceSlider.js",

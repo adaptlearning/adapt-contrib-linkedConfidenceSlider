@@ -17,10 +17,60 @@ define(function(require) {
             'touchstart .linkedConfidenceSlider-item-handle':'onHandlePressed',
             'mousedown .linkedConfidenceSlider-item-handle': 'onHandlePressed',
             'focus .linkedConfidenceSlider-item-handle':'onHandleFocus',
-            'blur .linkedConfidenceSlider-item-handle':'onHandleBlur',
-            'click .linkedConfidenceSlider-widget .button.submit': 'onSubmitClicked'
+            'blur .linkedConfidenceSlider-item-handle':'onHandleBlur'
         },
 
+        // Used by question to setup itself just before rendering
+        setupQuestion: function() {
+            this.setupLinkedModel();
+            if(!this.model.get('_items')) {
+                this.setupModelItems();
+            }
+            this.model.set({
+                _selectedItem: {}
+            });
+            this.checkAndDisableInteraction();
+        },
+
+        setupLinkedModel: function() {
+            var linkedModel = Adapt.components.findWhere({_id: this.model.get('_linkedToId')});
+            this.model.set('_scale', _.clone(linkedModel.get('_scale')));
+            this.model.set('axisLabel', linkedModel.get('axisLabel'));
+            this.model.set('_linkedModel', linkedModel);
+        },
+
+        setAllItemsEnabled: function(isEnabled) {
+            if (isEnabled) {
+                this.$('.linkedConfidenceSlider-widget').removeClass('disabled');
+            } else {
+                this.$('.linkedConfidenceSlider-widget').addClass('disabled');
+            }
+        },
+
+        // Used by question to setup itself just after rendering
+        onQuestionRendered: function() {
+            this.setScalePositions();
+            this.showAppropriateNumbers();
+            this.listenToLinkedModel();
+            if(this.model.get('_linkedModel').get('_isSubmitted')) {
+                this.onLinkedConfidenceChanged(this.model.get('_linkedModel'));
+            } else {
+                this.$('.linkedConfidenceSlider-body').html(this.model.get('disabledBody'));
+            }
+            this.setNormalisedHandlePosition();
+            this.onScreenSizeChanged();
+            this.showScaleMarker(true);
+            this.listenTo(Adapt, 'device:resize', this.onScreenSizeChanged);
+            this.setAltText(this.model.get('_scaleStart'));
+            this.setReadyStatus();
+        },
+
+        listenToLinkedModel: function() {
+            this.listenTo(this.model.get('_linkedModel'), 'change:_confidence', this.onLinkedConfidenceChanged);
+            this.listenTo(this.model.get('_linkedModel'), 'change:_isSubmitted', this.onLinkedSubmittedChanged);
+        },
+
+        // this should make the slider handle and slider bar to animate to give position
         animateToPosition: function(newPosition) {
             this.$('.linkedConfidenceSlider-item-handle').stop(true).animate({
                 left: newPosition + 'px'
@@ -32,47 +82,19 @@ define(function(require) {
             }, 300);
         },
 
-        preRender: function() {
-            this.setupLinkedModel();
-            Slider.prototype.preRender.apply(this);
-            this.model.set('_isEnabled', this.model.get('_linkedModel').get('_isSubmitted'));
-        },
-
-        setupLinkedModel: function() {
-            var linkedModel = Adapt.components.findWhere({_id: this.model.get('_linkedToId')});
-            this.model.set('_scale', _.clone(linkedModel.get('_scale')));
-            this.model.set('axisLabel', linkedModel.get('axisLabel'));
-            this.model.set('_linkedModel', linkedModel);
-        },
-
-        postRender: function() {
-            this.setScalePositions();
-            this.showAppropriateNumbers();
-            this.listenToLinkedModel();
-            if(this.model.get('_linkedModel').get('_isSubmitted')) {
-                this.onLinkedConfidenceChanged(this.model.get('_linkedModel'));
-            } else {
-                this.$('.linkedConfidenceSlider-body').html(this.model.get('disabledBody'));
-            }
-            this.setNormalisedHandlePosition();
-            Slider.prototype.postRender.apply(this);
-        },
-
+        // this should set given value to slider handle
         setAltText: function(value) {
             this.$('.linkedConfidenceSlider-item-handle').attr('alt', value);
         },
 
         resetQuestion: function(properties) {
-            ConfidenceSlider.prototype.resetQuestion.apply(this, arguments);
             this.model.set({
                 _linkedConfidence: 0
             });
+            this.selectItem(0);
+            this.animateToPosition(0);
             this.setAltText(this.model.get('_scale')._low);
-        },
-
-        listenToLinkedModel: function() {
-            this.listenTo(this.model.get('_linkedModel'), 'change:_confidence', this.onLinkedConfidenceChanged);
-            this.listenTo(this.model.get('_linkedModel'), 'change:_isSubmitted', this.onLinkedSubmittedChanged);
+            this.checkAndDisableInteraction();
         },
 
         onLinkedConfidenceChanged: function(linkedModel) {
@@ -90,7 +112,7 @@ define(function(require) {
 
         enableSelf: function() {
             this.model.set('_isEnabled', true);
-            this.$('.linkedConfidenceSlider-widget').removeClass('disabled user');
+            this.$('.linkedConfidenceSlider-widget').removeClass('disabled show-user-answer');
             this.$('.linkedConfidenceSlider-body').html(this.model.get('body'));
         },
 
@@ -101,7 +123,7 @@ define(function(require) {
         },
 
         mapIndexToPixels: function(value) {
-            var numberOfItems = this.model.get('items').length,
+            var numberOfItems = this.model.get('_items').length,
                 width = this.$('.linkedConfidenceSlider-item-bar').width();
             
             return Math.round(this.mapValue(value, 0, numberOfItems - 1, 0, width));
@@ -132,8 +154,8 @@ define(function(require) {
         },
 
         setScalePositions: function() {
-            var numberOfItems = this.model.get('items').length;
-            _.each(this.model.get('items'), function(item, index) {
+            var numberOfItems = this.model.get('_items').length;
+            _.each(this.model.get('_items'), function(item, index) {
                 var normalisedPosition = this.normalise(index, 0, numberOfItems -1);
                 this.$('.linkedConfidenceSlider-scale-number').eq(index).data('normalisedPosition', normalisedPosition);
                 this.$('.linkedConfidenceSlider-scale-notch').eq(index).data('normalisedPosition', normalisedPosition);
@@ -184,7 +206,7 @@ define(function(require) {
             if(event.which == 9) return; // tab key
             event.preventDefault();
 
-            var newItemIndex = this.getIndexFromValue(this.getSelectedItems().value);
+            var newItemIndex = this.getIndexFromValue(this.model.get('_selectedItem').value);
 
             switch (event.which) {
                 case 40: // ↓ down
@@ -224,7 +246,7 @@ define(function(require) {
             var scaleWidth = this.$('.linkedConfidenceSlider-scale-notches').width(),
                 $notches = this.$('.linkedConfidenceSlider-scale-notch'),
                 $numbers = this.$('.linkedConfidenceSlider-scale-number');
-            for(var i = 0, count = this.model.get('items').length; i < count; i++) {
+            for(var i = 0, count = this.model.get('_items').length; i < count; i++) {
                 var $notch = $notches.eq(i), $number = $numbers.eq(i),
                     newLeft = Math.round($notch.data('normalisedPosition') * scaleWidth);
                 $notch.css({left: newLeft});
@@ -240,6 +262,21 @@ define(function(require) {
             });
             if(this.model.get('_linkedConfidence') !== undefined) {
                 this.updateLinkedConfidenceIndicator();
+            }
+        },
+
+        //Use to check if the user is allowed to submit the question
+        canSubmit: function() {
+            if(this.model.get('_isEnabled') && this.model.get('_linkedModel').get('_isSubmitted')) {
+                return true;
+            } else {
+                return false;
+            }
+        },
+
+        checkAndDisableInteraction: function() {
+            if (!this.model.get('_linkedModel').get('_isSubmitted')) {
+                this.model.set('_isEnabled', false);
             }
         },
         
