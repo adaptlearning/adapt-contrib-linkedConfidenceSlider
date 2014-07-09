@@ -7,6 +7,8 @@
   ],
   "description": "A contributed sliding scale component that compares user confidence to a previous measurement.",
   "main": "/js/adapt-contrib-linkedConfidenceSlider.js",
+  "displayName" : "Linked Confidence Slider",
+  "component" : "linkedConfidenceSlider",
   "keywords": [
     "adapt-plugin",
     "adapt-component"
