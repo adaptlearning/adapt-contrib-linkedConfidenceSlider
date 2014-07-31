@@ -1,0 +1,87 @@
+  {
+  "type":"object",
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "id": "http://jsonschema.net",
+  "$ref": "http://localhost/plugins/content/component/model.schema",
+  "properties":{
+    "_feedback": {
+      "type":"object",
+      "required":true,
+      "properties":{
+        "_comparison": {
+          "type":"object",
+          "required":false,
+          "properties":{
+            "higher": {
+              "type":"string",
+              "required":false
+            },
+            "lower": {
+              "type":"string",
+              "required":false
+            },
+            "same": {
+              "type":"string",
+              "required":false
+            }
+          }
+        },
+        "_threshold": {
+          "type":"array",
+          "required":true,
+          "items":
+            {
+              "type":"object",
+              "required":true,
+              "properties":{
+                "_values": {
+                  "type":"object",
+                  "required":true,
+                  "properties":{
+                    "_high": {
+                      "type":"number",
+                      "required":true
+                    },
+                    "_low": {
+                      "type":"number",
+                      "required":true
+                    }
+                  }
+                },
+                "text": {
+                  "type":"string",
+                  "required":false
+                }
+              }
+            }
+        },
+        "feedbackSeparator": {
+          "type":"string",
+          "required":false
+        },
+        "generic": {
+          "type":"string",
+          "required":false
+        }
+      }
+    },
+    "_linkedTo": {
+      "type":"string",
+      "required":true
+    },
+    "buttons": {
+      "type":"object",
+      "required":true,
+      "properties":{
+        "submit": {
+          "type":"string",
+          "required":true
+        }
+      }
+    },
+    "disabledBody": {
+      "type":"string",
+      "required":false
+    }
+  }
+}
