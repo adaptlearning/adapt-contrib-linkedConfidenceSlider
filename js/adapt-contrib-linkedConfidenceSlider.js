@@ -49,13 +49,23 @@ define(function(require) {
             this.setScalePositions();
             this.showAppropriateNumbers();
             this.listenToLinkedModel();
-            if(this.model.get('_linkedModel').get('_isSubmitted')) {
+
+            var isLinkedSubmitted = this.model.get('_linkedModel').get('_isSubmitted');
+
+            if(isLinkedSubmitted) {
                 this.onLinkedConfidenceChanged(this.model.get('_linkedModel'));
             } else {
                 this.$('.linkedConfidenceSlider-body').html(this.model.get('disabledBody'));
             }
+
             this.setNormalisedHandlePosition();
+
             Slider.prototype.postRender.apply(this);
+
+            // don't add the user answer class applied in QuestionView
+            if(!this.model.get('_isEnabled') && !this.model.get('_isSubmitted')) {
+                this.$(".component-widget").removeClass("user");
+            }
         },
 
         resetQuestion: function(properties) {
