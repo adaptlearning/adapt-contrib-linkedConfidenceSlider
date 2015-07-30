@@ -1,8 +1,3 @@
-/*
- * adapt-contrib-linkedConfidenceSlider
- * License - https://github.com/adaptlearning/adapt_framework/blob/master/LICENSE
- * Maintainers - Kev Adsett <kev.adsett@kineo.com>, Himanshu Rajotia <himanshu.rajotia@credipoint.com>
- */
 define(function(require) {
     var Slider = require('components/adapt-contrib-slider/js/adapt-contrib-slider');
     var ConfidenceSlider = require('components/adapt-contrib-confidenceSlider/js/adapt-contrib-confidenceSlider');
