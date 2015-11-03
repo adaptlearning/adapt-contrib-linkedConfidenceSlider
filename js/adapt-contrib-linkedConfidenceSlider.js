@@ -108,7 +108,7 @@ define(function(require) {
         enableSelf: function() {
             this.model.set('_isEnabled', true);
             this.$('.linkedConfidenceSlider-widget').removeClass('disabled show-user-answer');
-            this.$('.linkedConfidenceSlider-body').html(this.model.get('body'));
+            this.$('.linkedConfidenceSlider-body').html(this.model.get('body')).a11y_cntrl_enabled(true);
         },
 
         updateLinkedConfidenceIndicator: function() {
@@ -120,10 +120,9 @@ define(function(require) {
         mapIndexToPixels: function(value) {
             var numberOfItems = this.model.get('_items').length,
                 width = this.$('.linkedConfidenceSlider-item-bar').width();
-            
             return Math.round(this.mapValue(value, 0, numberOfItems - 1, 0, width));
         },
-        
+
         normalisePixelPosition: function(pixelPosition) {
             return this.normalise(pixelPosition, 0, this.$('.linkedConfidenceSlider-item-bar').width())
         },
@@ -161,18 +160,15 @@ define(function(require) {
             event.preventDefault();
             var left = (event.pageX || event.originalEvent.touches[0].pageX) - event.data.offsetLeft;
             left = Math.max(Math.min(left, event.data.width), 0);
-            
             this.$('.linkedConfidenceSlider-item-handle').css({
                 left: left + 'px'
             });
-
             this.$('.linkedConfidenceSlider-item-indicator-bar').css({
                 width: left + 'px'
             });
-
             this.selectItem(this.mapPixelsToIndex(left));
         },
-        
+
         onHandleFocus: function(event) {
             event.preventDefault();
             this.$('.linkedConfidenceSlider-item-handle').on('keydown', _.bind(this.onKeyDown, this));
@@ -182,11 +178,11 @@ define(function(require) {
             event.preventDefault();
             this.$('.linkedConfidenceSlider-item-handle').off('keydown');
         },
-        
+
         onHandlePressed: function (event) {
             event.preventDefault();
             if (!this.model.get("_isEnabled") || this.model.get("_isSubmitted")) return;
-            
+
             var eventData = {
                 width:this.$('.linkedConfidenceSlider-item-bar').width(),
                 offsetLeft: this.$('.linkedConfidenceSlider-item-bar').offset().left
@@ -201,7 +197,7 @@ define(function(require) {
             if(event.which == 9) return; // tab key
             event.preventDefault();
 
-            var newItemIndex = this.getIndexFromValue(this.model.get('_selectedItem').value);
+            var newItemIndex = this.getIndexFromValue(this.model.get('_selectedItem')[0].value);
 
             switch (event.which) {
                 case 40: // ↓ down
@@ -219,15 +215,15 @@ define(function(require) {
             this.animateToPosition(this.mapIndexToPixels(newItemIndex));
             this.setAltText(newItemIndex + 1);
         },
-        
+
         onItemBarSelected: function (event) {
             event.preventDefault();
             if (!this.model.get("_isEnabled") || this.model.get("_isSubmitted")) return;
-                                
+
             var offsetLeft = this.$('.linkedConfidenceSlider-item-bar').offset().left,
                 width = this.$('.linkedConfidenceSlider-item-bar').width(),
                 left = (event.pageX || event.originalEvent.touches[0].pageX) - offsetLeft;
-            
+
             left = Math.max(Math.min(left, width), 0);
             var nearestItemIndex = this.mapPixelsToIndex(left);
             this.selectItem(left);
@@ -274,7 +270,7 @@ define(function(require) {
                 this.model.set('_isEnabled', false);
             }
         },
-        
+
         setNormalisedHandlePosition: function() {
             var $handle = this.$('.linkedConfidenceSlider-item-handle');
             var normalisedPosition = this.normalisePixelPosition(parseInt($handle.css('left').slice(0, -2)));
@@ -325,8 +321,8 @@ define(function(require) {
             return feedbackString;
         }
     });
-    
+
     Adapt.register("linkedConfidenceSlider", LinkedConfidenceSlider);
-    
+
     return LinkedConfidenceSlider;
 });
