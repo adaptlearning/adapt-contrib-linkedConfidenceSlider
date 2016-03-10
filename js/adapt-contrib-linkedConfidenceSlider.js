@@ -201,7 +201,7 @@ define(function(require) {
             if(event.which == 9) return; // tab key
             event.preventDefault();
 
-            var newItemIndex = this.getIndexFromValue(this.model.get('_selectedItem').value);
+            var newItemIndex = this.getIndexFromValue(this.model.get('_selectedItem')[0].value);
 
             switch (event.which) {
                 case 40: // ↓ down
@@ -324,6 +324,9 @@ define(function(require) {
             }
             return feedbackString;
         }
+    },
+    {
+        template: 'linkedConfidenceSlider'
     });
     
     Adapt.register("linkedConfidenceSlider", LinkedConfidenceSlider);
