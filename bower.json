@@ -1,8 +1,10 @@
 {
   "name": "adapt-contrib-linkedConfidenceSlider",
   "version": "0.0.1",
+  "framework": "^2.0.0",
   "homepage": "https://github.com/adaptlearning/adapt-contrib-linkedConfidenceSlider",
   "issues": "https://github.com/adaptlearning/adapt-contrib-linkedConfidenceSlider/issues",
+  "repository": "git@github.com:adaptlearning/adapt-contrib-linkedConfidenceSlider.git",
   "description": "A contributed sliding scale component that compares user confidence to a previous measurement.",
   "main": "/js/adapt-contrib-linkedConfidenceSlider.js",
   "displayName" : "Linked Confidence Slider",
